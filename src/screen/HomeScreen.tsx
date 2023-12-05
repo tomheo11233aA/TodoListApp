@@ -8,7 +8,10 @@ import moment from 'moment';
 import { Swipeable } from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
-  const [todos, setTodos] = useState<Task[]>([]);
+  const [todos, setTodos] = useState<Task[]>([
+    { task: 'Học Retrofit Android', date: new Date(), category: 'Android Studio' },
+    { task: 'Học Redux', date: new Date(), category: 'React Native' },
+  ]);
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [currentItem, setCurrentItem] = useState<Task | null>(null);

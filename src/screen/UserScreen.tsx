@@ -77,11 +77,12 @@ const UserScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#EEE'
   },
   header: {
     backgroundColor: '#0DAB98',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   image: {
     top: 0,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   button: {
-    marginTop: 80,
+    marginTop: 20,
     width: '90%',
     borderRadius: 150,
     marginBottom: 10,

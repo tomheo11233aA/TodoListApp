@@ -9,8 +9,8 @@ import { Swipeable } from 'react-native-gesture-handler';
 
 const HomeScreen = () => {
   const [todos, setTodos] = useState<Task[]>([
-    { task: 'Học Retrofit Android', date: new Date(), category: 'Android Studio' },
-    { task: 'Học Redux', date: new Date(), category: 'React Native' },
+    { task: 'Học Retrofit Android', date: new Date(), category: 'Android Studio', completed: true },
+    { task: 'Học Redux', date: new Date(), category: 'React Native', completed: false },
   ]);
   const [visible, setVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
@@ -24,32 +24,52 @@ const HomeScreen = () => {
     setEditVisible(true);
   };
 
-  const renderItem = ({ item }: { item: Task }) => (
-    <Swipeable
-      renderRightActions={() => (
-        <Layout style={styles.swipeableRight}>
-          <Button
-            onPress={() => openEditModal(item)}
-            style={styles.swipeableButton}
-            status='warning'
-            accessoryLeft={(props) => <Icon {...props} name='edit-outline' />}
-          />
-          <Button
-            onPress={() => deleteTask(todos.indexOf(item))}
-            style={styles.swipeableButton}
-            status='danger'
-            accessoryLeft={(props) => <Icon {...props} name='trash-2-outline' />}
-          />
-        </Layout>
-      )}
-    >
-      <Card style={styles.card}>
-        <Text style={styles.taskText}>{item.task}</Text>
-        <Text style={styles.dateText}>{moment(item.date).format('DD/MM/YYYY')}</Text>
-        <Text style={styles.categoryText}>{item.category}</Text>
-      </Card>
-    </Swipeable>
-  );
+  const getCardStatus = (item: Task) => {
+    const timeLeft = moment(item.date).diff(moment(), 'hours');
+    if (item.completed) {
+      return 'success';
+    }
+    return timeLeft <= 1 ? 'danger' : 'warning';
+  };
+
+  const markAsCompleted = (index: number) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = true;
+    setTodos(newTodos);
+  };
+
+  const renderItem = ({ item, index }: { item: Task; index: number}) => {
+    const status = getCardStatus(item);
+    return (
+      <Swipeable
+        renderRightActions={() => (
+          <Layout style={styles.swipeableRight}>
+            <Button
+              onPress={() => openEditModal(item)}
+              style={styles.swipeableButton}
+              status='warning'
+              accessoryLeft={(props) => <Icon {...props} name='edit-outline' />}
+            />
+            <Button
+              onPress={() => deleteTask(todos.indexOf(item))}
+              style={styles.swipeableButton}
+              status='danger'
+              accessoryLeft={(props) => <Icon {...props} name='trash-2-outline' />}
+            />
+          </Layout>
+        )}
+      >
+        <Card status={status} style={styles.card} onLongPress={() => markAsCompleted(index)}>
+          <Text style={styles.taskText}>{item.task}</Text>
+          <Layout style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.dateText}>{moment(item.date).format('DD/MM/YYYY')}</Text>
+            <Text style={styles.dateText}>{moment(item.date).fromNow()}</Text>
+          </Layout>
+          <Text style={styles.categoryText}>{item.category}</Text>
+        </Card>
+      </Swipeable>
+    )
+  };
 
   return (
     <Layout style={styles.layout}>

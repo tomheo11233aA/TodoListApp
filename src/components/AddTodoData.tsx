@@ -6,6 +6,7 @@ export type Task = {
     task: string;
     date: Date;
     category: string;
+    completed?: boolean;
 }
 
 type ModalProps = {
